@@ -50,12 +50,14 @@ def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
+    """Return the JSON representation of your dictionary."""
+
     # Calculate the date 1 year ago from the last data point in the database
     query_date = dt.date(2017, 8, 23)- dt.timedelta(days=364)
 
     # Quering the highest precipitation score per day and then grouping by that date
     one_year_precip = session.query(measurement.date, func.max(measurement.prcp)).\
-                        ##filter(measurement.date >= query_date).group_by(measurement.date).all()
+                        filter(measurement.date >= query_date).group_by(measurement.date).all()
 
     # Convert to list of dictionaries to jsonify
     precip_data = []
@@ -72,9 +74,10 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    """Return a JSON list of stations from the dataset."""
     # Create our session from Python to the DB
     session = Session(engine)
+
+    """Return a JSON list of stations from the dataset."""
 
     # Query all passengers
     station_list = session.query(Station.name).all()
@@ -85,11 +88,12 @@ def stations():
     return jsonify(all_stations)
 
 
- @app.route("/api/v1.0/tobs")
-def tobs(): 
-    """Return a JSON list of temperature observations (TOBS) for the previous year."""  
+@app.route("/api/v1.0/tobs")
+def tobs():   
     # Create our session from Python to the DB
     session = Session(engine)
+
+    """Return a JSON list of temperature observations (TOBS) for the previous year."""
 
     #Calculate the date 12 months prior to the last date of data recorded (2017-08-23)
     query_date = dt.date(2017, 8, 23)- dt.timedelta(days=364)
