@@ -55,7 +55,7 @@ def precipitation():
 
     # Quering the highest precipitation score per day and then grouping by that date
     one_year_precip = session.query(measurement.date, func.max(measurement.prcp)).\
-                        filter(measurement.date >= query_date).group_by(measurement.date).all()
+                        ##filter(measurement.date >= query_date).group_by(measurement.date).all()
 
     # Convert to list of dictionaries to jsonify
     precip_data = []
@@ -70,10 +70,31 @@ def precipitation():
     return jsonify(precip_data)
 
 
-##@app.route("/api/v1.0/stations")
-##def stations():
-    # Create our session (link) from Python to the DB
-    ##session = Session(engine)
+@app.route("/api/v1.0/stations")
+def stations():
+    """Return a JSON list of stations from the dataset."""
+    # Create our session from Python to the DB
+    session = Session(engine)
+
+    # Query all passengers
+    station_list = session.query(Station.name).all()
+
+    # Convert list of tuples into normal list
+    stations = list(np.ravel(station_list))
+
+    return jsonify(all_stations)
+
+
+ @app.route("/api/v1.0/tobs")
+def tobs(): 
+    """Return a JSON list of temperature observations (TOBS) for the previous year."""  
+    # Create our session from Python to the DB
+    session = Session(engine)
+
+    #Calculate the date 12 months prior to the last date of data recorded (2017-08-23)
+    query_date = dt.date(2017, 8, 23)- dt.timedelta(days=364)
+
+
 
 
 
