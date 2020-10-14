@@ -1,4 +1,5 @@
 import numpy as np
+import datetime as dt
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -80,12 +81,12 @@ def stations():
     """Return a JSON list of stations from the dataset."""
 
     # Query all passengers
-    station_list = session.query(Station.name).all()
+    station_list = session.query(station.name).all()
 
     # Convert list of tuples into normal list
     stations = list(np.ravel(station_list))
 
-    return jsonify(all_stations)
+    return jsonify(stations)
 
 
 @app.route("/api/v1.0/tobs")
@@ -100,6 +101,16 @@ def tobs():
 
 
 
+@app.route("/api/v1.0/start")
+def start():   
+    # Create our session from Python to the DB
+    session = Session(engine)
+
+    
+@app.route("/api/v1.0/start/end")
+def start_end():   
+    # Create our session from Python to the DB
+    session = Session(engine)
 
 
 if __name__ == '__main__':
